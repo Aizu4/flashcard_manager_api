@@ -1,0 +1,29 @@
+from ninja import Router
+
+from v1.models import Card
+from v1.schemas.card import CardSchema, CardPostSchema, CardPatchSchema
+
+router = Router()
+
+
+@router.get('/', response=list[CardSchema])
+def get_cards(_request):
+    return Card.objects.all()
+
+
+@router.get('/{int:id}', response=CardSchema)
+def get_card(_request, id: int):
+    return Card.objects.get(id=id)
+
+
+@router.post('/', response=CardSchema)
+def post_card(request, card: CardPostSchema):
+    return Card.objects.create(user=request.auth, **card.dict(exclude_defaults=True))
+
+
+@router.patch('/{int:id}', response=CardSchema)
+def patch_card(_request, id: int, Card_patch: CardPatchSchema):
+    card = Card.objects.get(id=id)
+    card.update(**Card_patch.dict(exclude_defaults=True))
+    card.save()
+    return Card
