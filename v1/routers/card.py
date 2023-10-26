@@ -1,9 +1,10 @@
 from ninja import Router
+from ninja_jwt.authentication import JWTAuth
 
 from v1.models import Card
 from v1.schemas.card import CardSchema, CardPostSchema, CardPatchSchema
 
-router = Router()
+router = Router(auth=JWTAuth())
 
 
 @router.get('/', response=list[CardSchema])

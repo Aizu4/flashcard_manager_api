@@ -1,9 +1,10 @@
 from ninja import Router
+from ninja_jwt.authentication import JWTAuth
 
 from v1.models import Deck
 from v1.schemas.deck import DeckSchema, DeckPostSchema, DeckPatchSchema
 
-router = Router()
+router = Router(auth=JWTAuth())
 
 
 @router.get('/', response=list[DeckSchema])
@@ -27,3 +28,8 @@ def patch_deck(_request, id: int, deck_patch: DeckPatchSchema):
     deck.update(**deck_patch.dict(exclude_defaults=True))
     deck.save()
     return deck
+
+
+@router.delete('/{str:id}')
+def get_deck(_request, id: str):
+    Deck.objects.get(id=id).delete()

@@ -1,5 +1,4 @@
 from ninja import ModelSchema, Schema
-from pydantic.fields import Undefined
 
 from v1.models import Card
 
@@ -12,7 +11,7 @@ class CardSchema(ModelSchema):
 
 class CardPostSchema(Schema):
     name: str
-    slug: str | Undefined = None
+    slug: str | None = None
 
 
 class CardPatchSchema(Schema):

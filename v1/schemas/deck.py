@@ -1,7 +1,4 @@
-from typing import Optional
-
 from ninja import ModelSchema, Schema
-from pydantic.fields import Undefined
 
 from v1.models import Deck
 
@@ -14,7 +11,7 @@ class DeckSchema(ModelSchema):
 
 class DeckPostSchema(Schema):
     name: str
-    slug: str | Undefined = None
+    slug: str | None = None
 
 
 class DeckPatchSchema(Schema):
