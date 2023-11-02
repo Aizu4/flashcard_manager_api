@@ -10,8 +10,10 @@ class CardSchema(ModelSchema):
 
 
 class CardPostSchema(Schema):
-    name: str
-    slug: str | None = None
+    front: str | None = None
+    back: str | None = None
+    data: dict | None = None
+    notes: str | None = None
 
 
 class CardPatchSchema(Schema):

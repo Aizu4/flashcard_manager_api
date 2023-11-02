@@ -13,3 +13,7 @@ class BaseModel(models.Model):
 
     def __repr__(self):
         return f"<{str(type(self))[1:-1]}: {self.__dict__}>"
+
+    def update(self, **kwargs):
+        for attr, val in kwargs.items():
+            setattr(self, attr, val)

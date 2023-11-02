@@ -18,8 +18,8 @@ def get_card(_request, id: int):
 
 
 @router.post('/', response=CardSchema)
-def post_card(request, card: CardPostSchema):
-    return Card.objects.create(user=request.auth, **card.dict(exclude_defaults=True))
+def post_card(request, deck_id: str, card: CardPostSchema):
+    return Card.objects.create(user=request.auth, deck_id=deck_id, **card.dict(exclude_defaults=True))
 
 
 @router.patch('/{int:id}', response=CardSchema)
