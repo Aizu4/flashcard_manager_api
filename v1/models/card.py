@@ -11,3 +11,4 @@ class Card(BaseModel):
     back = models.TextField(default='')
     data = models.JSONField(default=dict)
     notes = models.TextField(default='')
+    example = models.TextField(default='')

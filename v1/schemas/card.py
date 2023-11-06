@@ -14,8 +14,12 @@ class CardPostSchema(Schema):
     back: str | None = None
     data: dict | None = None
     notes: str | None = None
+    example: str | None = None
 
 
 class CardPatchSchema(Schema):
-    name: str | None = None
-    slug: str | None = None
+    front: str | None = None
+    back: str | None = None
+    data: dict | None = None
+    notes: str | None = None
+    example: str | None = None

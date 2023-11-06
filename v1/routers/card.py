@@ -13,7 +13,7 @@ def get_cards(_request):
 
 
 @router.get('/{int:id}', response=CardSchema)
-def get_card(_request, id: int):
+def get_card(_request, id: str):
     return Card.objects.get(id=id)
 
 
@@ -22,9 +22,9 @@ def post_card(request, deck_id: str, card: CardPostSchema):
     return Card.objects.create(user=request.auth, deck_id=deck_id, **card.dict(exclude_defaults=True))
 
 
-@router.patch('/{int:id}', response=CardSchema)
-def patch_card(_request, id: int, Card_patch: CardPatchSchema):
+@router.patch('/{uuid:id}', response=CardSchema)
+def patch_card(_request, id: str, card_patch: CardPatchSchema):
     card = Card.objects.get(id=id)
-    card.update(**Card_patch.dict(exclude_defaults=True))
+    card.update(**card_patch.dict(exclude_defaults=True))
     card.save()
-    return Card
+    return card
