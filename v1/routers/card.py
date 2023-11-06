@@ -28,3 +28,8 @@ def patch_card(_request, id: str, card_patch: CardPatchSchema):
     card.update(**card_patch.dict(exclude_defaults=True))
     card.save()
     return card
+
+
+@router.delete('/{uuid:id}')
+def delete_card(_request, id: str):
+    Card.objects.get(id=id).delete()
