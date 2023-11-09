@@ -8,7 +8,7 @@ def _slug_generator(length=8):
 
 
 class SlugMixin(models.Model):
-    slug = models.CharField(max_length=16, default=_slug_generator, unique=True)
+    slug = models.CharField(max_length=16, default=_slug_generator, unique=True, db_index=True)
 
     class Meta:
         abstract = True
