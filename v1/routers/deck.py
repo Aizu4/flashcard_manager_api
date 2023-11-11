@@ -8,13 +8,13 @@ router = Router(auth=JWTAuth())
 
 
 @router.get('/', response=list[DeckSimpleSchema])
-def get_decks(_request):
-    return Deck.objects.all()
+def get_decks(request):
+    return decks(request).all()
 
 
 @router.get('/{uuid:id}', response=DeckSchema)
-def get_deck(_request, id: str):
-    return Deck.objects.get(id=id)
+def get_deck(request, id: str):
+    return decks(request).get(id=id)
 
 
 @router.post('/', response=DeckSchema)
@@ -23,13 +23,19 @@ def post_deck(request, deck: DeckPostSchema):
 
 
 @router.patch('/{uuid:id}', response=DeckSchema)
-def patch_deck(_request, id: str, deck_patch: DeckPatchSchema):
-    deck = Deck.objects.get(id=id)
+def patch_deck(request, id: str, deck_patch: DeckPatchSchema):
+    deck = decks(request).get(id=id)
     deck.update(**deck_patch.dict(exclude_defaults=True))
     deck.save()
     return deck
 
 
 @router.delete('/{uuid:id}')
-def get_deck(_request, id: str):
-    Deck.objects.get(id=id).delete()
+def get_deck(request, id: str):
+    decks(request).get(id=id).delete()
+
+
+def decks(request):
+    if request.auth.is_superuser:
+        return Deck.objects.all()
+    return Deck.objects.filter(user=request.auth).all()

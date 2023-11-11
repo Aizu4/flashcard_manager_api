@@ -8,13 +8,13 @@ router = Router(auth=JWTAuth())
 
 
 @router.get('/', response=list[CardSchema])
-def get_cards(_request):
-    return Card.objects.all()
+def get_cards(request):
+    return cards(request).all()
 
 
 @router.get('/{int:id}', response=CardSchema)
-def get_card(_request, id: str):
-    return Card.objects.get(id=id)
+def get_card(request, id: str):
+    return cards(request).get(id=id)
 
 
 @router.post('/', response=CardSchema)
@@ -23,13 +23,19 @@ def post_card(request, deck_id: str, card: CardPostSchema):
 
 
 @router.patch('/{uuid:id}', response=CardSchema)
-def patch_card(_request, id: str, card_patch: CardPatchSchema):
-    card = Card.objects.get(id=id)
+def patch_card(request, id: str, card_patch: CardPatchSchema):
+    card = cards(request).get(id=id)
     card.update(**card_patch.dict(exclude_defaults=True))
     card.save()
     return card
 
 
 @router.delete('/{uuid:id}')
-def delete_card(_request, id: str):
-    Card.objects.get(id=id).delete()
+def delete_card(request, id: str):
+    cards(request).get(id=id).delete()
+
+
+def cards(request):
+    if request.auth.is_superuser:
+        return Card.objects.all()
+    return Card.objects.filter(user=request.auth).all()
