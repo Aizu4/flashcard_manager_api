@@ -1,7 +1,7 @@
 from ninja import ModelSchema, Schema
 
 from v1.models import Deck
-from v1.schemas.card import CardSchema
+from v1.schemas.card_schemas import CardSchema
 
 
 class DeckSimpleSchema(ModelSchema):

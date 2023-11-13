@@ -1,7 +1,7 @@
 from ninja import Router
 from ninja_jwt.authentication import JWTAuth
 
-from v1.schemas.user import UserSchema
+from v1.schemas.user_schemas import UserSchema
 
 router = Router(auth=JWTAuth())
 

@@ -2,7 +2,7 @@ from ninja import Router
 from ninja_jwt.authentication import JWTAuth
 
 from v1.models import Deck
-from v1.schemas.deck import DeckSchema, DeckPostSchema, DeckPatchSchema, DeckSimpleSchema
+from v1.schemas.deck_schemas import DeckSchema, DeckPostSchema, DeckPatchSchema, DeckSimpleSchema
 
 router = Router(auth=JWTAuth())
 
