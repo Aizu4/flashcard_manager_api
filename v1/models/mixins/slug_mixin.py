@@ -14,5 +14,5 @@ class SlugMixin(models.Model):
         abstract = True
 
     @staticmethod
-    def _slug_generator(length=8):
-        return ''.join(random.choices('123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ', k=length))
+    def _slug_generator(*args, **kwargs):
+        return _slug_generator(*args, **kwargs)
