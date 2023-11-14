@@ -38,4 +38,4 @@ def delete_card(request, id: str):
 def cards(request):
     if request.auth.is_superuser:
         return Card.objects.all()
-    return Card.objects.filter(user=request.auth).all()
+    return Card.objects.filter(deck__user=request.auth).all()
