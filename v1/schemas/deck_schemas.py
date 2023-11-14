@@ -21,12 +21,12 @@ class DeckSchema(ModelSchema):
 class DeckPostSchema(Schema):
     name: str
     slug: str | None = None
-    front_language: str | None = None
-    back_language: str | None = None
+    front_language_code: str | None = None
+    back_language_code: str | None = None
 
 
 class DeckPatchSchema(Schema):
     name: str | None = None
     slug: str | None = None
-    front_language: str | None = None
-    back_language: str | None = None
+    front_language_code: str | None = None
+    back_language_code: str | None = None
