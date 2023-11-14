@@ -12,4 +12,5 @@ class Card(TimestampMixin, BaseModel):
     back = models.TextField(default='')
     data = models.JSONField(default=dict)
     notes = models.TextField(default='')
-    example = models.TextField(default='')
+    example_front = models.TextField(default='')
+    example_back = models.TextField(default='')
