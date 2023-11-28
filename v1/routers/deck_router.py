@@ -3,6 +3,7 @@ from ninja_jwt.authentication import JWTAuth
 
 from v1.models import Deck
 from v1.schemas.deck_schemas import DeckSchema, DeckPostSchema, DeckPatchSchema, DeckSimpleSchema
+from v1.services.csv_service import CSVService
 
 router = Router(auth=JWTAuth())
 
@@ -33,6 +34,12 @@ def patch_deck(request, id: str, deck_patch: DeckPatchSchema):
 @router.delete('/{uuid:id}')
 def get_deck(request, id: str):
     decks(request).get(id=id).delete()
+
+
+@router.post('/{uuid:id}/export')
+def export_deck(request, id: str):
+    deck = decks(request).get(id=id)
+    return CSVService().export_deck(deck)
 
 
 def decks(request):
