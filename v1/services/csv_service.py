@@ -7,9 +7,8 @@ from django.http import HttpResponse
 class CSVService:
     rows = ('front', 'back', 'example_front', 'example_back', 'notes')
 
-    def __init__(self, separator: str = '\t', encoding: str = 'utf-8', quotechar: str = '"'):
+    def __init__(self, separator: str = '\t', quotechar: str = '"'):
         self.separator = separator
-        self.encoding = encoding
         self.quotechar = quotechar
 
     def export_deck(self, deck):

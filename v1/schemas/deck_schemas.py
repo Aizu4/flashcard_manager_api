@@ -34,5 +34,4 @@ class DeckPatchSchema(Schema):
 
 class DeckCSVSettingsSchema(Schema):
     separator: str | None = None
-    encoding: str | None = None
     quotechar: str | None = None
