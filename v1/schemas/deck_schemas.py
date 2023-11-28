@@ -1,3 +1,5 @@
+from typing import Literal
+
 from ninja import ModelSchema, Schema
 
 from v1.models import Deck
@@ -33,5 +35,5 @@ class DeckPatchSchema(Schema):
 
 
 class DeckCSVSettingsSchema(Schema):
-    separator: str | None = None
-    quotechar: str | None = None
+    separator: Literal[',', ';', '\t', '|']
+    quotechar: Literal['\'', '"', '`']
