@@ -30,3 +30,9 @@ class DeckPatchSchema(Schema):
     slug: str | None = None
     front_language_code: str | None = None
     back_language_code: str | None = None
+
+
+class DeckCSVSettingsSchema(Schema):
+    separator: str | None = None
+    encoding: str | None = None
+    quotechar: str | None = None
