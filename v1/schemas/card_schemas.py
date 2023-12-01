@@ -7,6 +7,7 @@ class CardSchema(ModelSchema):
     class Config:
         model = Card
         model_fields = "__all__"
+        model_exclude = ["image"]
 
 
 class CardPostSchema(Schema):
