@@ -32,7 +32,7 @@ def patch_deck(request, id: str, deck_patch: DeckPatchSchema):
 
 
 @router.delete('/{uuid:id}')
-def get_deck(request, id: str):
+def delete_deck(request, id: str):
     decks(request).get(id=id).delete()
 
 
