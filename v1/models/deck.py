@@ -14,11 +14,11 @@ class Deck(SlugMixin, TimestampMixin, AccessCheckMixin, BaseModel):
     back_language_code = models.CharField(max_length=3, null=True)
 
     @classmethod
-    def ediable_by(cls, user: User) -> QuerySet['Deck']:
+    def editable_by(cls, user: User) -> QuerySet['Deck']:
         if user.is_superuser:
-            return cls.objects
+            return cls.objects.all()
         return cls.objects.filter(user=user)
 
     @classmethod
     def visible_by(cls, user: User) -> QuerySet['Deck']:
-        return cls.ediable_by(user) | cls.ediable_by(user).filter(public=True)
+        return cls.editable_by(user) | cls.editable_by(user).filter(public=True)

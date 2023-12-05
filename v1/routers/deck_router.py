@@ -25,7 +25,7 @@ def post_deck(request, deck: DeckPostSchema):
 
 @router.patch('/{uuid:id}', response=DeckSchema)
 def patch_deck(request, id: str, deck_patch: DeckPatchSchema):
-    deck = Deck.ediable_by(request.auth).get(id=id)
+    deck = Deck.editable_by(request.auth).get(id=id)
     deck.update(**deck_patch.dict(exclude_defaults=True))
     deck.save()
     return deck
@@ -33,7 +33,7 @@ def patch_deck(request, id: str, deck_patch: DeckPatchSchema):
 
 @router.delete('/{uuid:id}')
 def delete_deck(request, id: str):
-    Deck.ediable_by(request.auth).get(id=id).delete()
+    Deck.editable_by(request.auth).get(id=id).delete()
 
 
 @router.post('/{uuid:id}/export')

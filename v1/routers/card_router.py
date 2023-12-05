@@ -21,14 +21,14 @@ def get_card(request, id: str):
 
 @router.post('/', response=CardSchema)
 def post_card(request, deck_id: str, card: CardPostSchema):
-    if not Deck.objects.get(id=deck_id).is_ediable_by(request.auth):
+    if not Deck.objects.get(id=deck_id).is_editable_by(request.auth):
         return
-    return Card.objects.create(user=request.auth, deck_id=deck_id, **card.dict(exclude_defaults=True))
+
+    return Card.objects.create(deck_id=deck_id, **card.dict(exclude_defaults=True))
 
 
 @router.patch('/{uuid:id}', response=CardSchema)
 def patch_card(request, id: str, card_patch: CardPatchSchema):
-    print(request.__dict__)
     card = Card.ediable_by(request.auth).get(id=id)
     card.update(**card_patch.dict(exclude_defaults=True))
     card.save()
