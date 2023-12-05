@@ -1,3 +1,5 @@
+from typing import Optional
+
 from ninja import ModelSchema, Schema
 
 from v1.models import Card
@@ -11,18 +13,18 @@ class CardSchema(ModelSchema):
 
 
 class CardPostSchema(Schema):
-    front: str | None = None
-    back: str | None = None
-    data: dict | None = None
-    notes: str | None = None
-    example_front: str | None = None
-    example_back: str | None = None
+    front: Optional[str] = None
+    back: Optional[str] = None
+    data: Optional[dict] = None
+    notes: Optional[str] = None
+    example_front: Optional[str] = None
+    example_back: Optional[str] = None
 
 
 class CardPatchSchema(Schema):
-    front: str | None = None
-    back: str | None = None
-    data: dict | None = None
-    notes: str | None = None
-    example_front: str | None = None
-    example_back: str | None = None
+    front: Optional[str] = None
+    back: Optional[str] = None
+    data: Optional[dict] = None
+    notes: Optional[str] = None
+    example_front: Optional[str] = None
+    example_back: Optional[str] = None

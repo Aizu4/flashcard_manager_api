@@ -7,7 +7,7 @@ from django.http import HttpResponse
 class CSVService:
     rows = ('front', 'back', 'example_front', 'example_back', 'notes')
 
-    def __init__(self, separator: str = '\t', quotechar: str = '"'):
+    def __init__(self, separator: str, quotechar: str):
         self.separator = separator
         self.quotechar = quotechar
 

@@ -10,12 +10,12 @@ router = Router(auth=JWTAuth())
 
 @router.get('/', response=list[DeckSimpleSchema])
 def get_decks(request):
-    return decks(request).all()
+    return Deck.visible_by(request.auth).all()
 
 
 @router.get('/{uuid:id}', response=DeckSchema)
 def get_deck(request, id: str):
-    return decks(request).get(id=id)
+    return Deck.visible_by(request.auth).get(id=id)
 
 
 @router.post('/', response=DeckSchema)
@@ -25,7 +25,7 @@ def post_deck(request, deck: DeckPostSchema):
 
 @router.patch('/{uuid:id}', response=DeckSchema)
 def patch_deck(request, id: str, deck_patch: DeckPatchSchema):
-    deck = decks(request).get(id=id)
+    deck = Deck.editable_by(request.auth).get(id=id)
     deck.update(**deck_patch.dict(exclude_defaults=True))
     deck.save()
     return deck
@@ -33,16 +33,10 @@ def patch_deck(request, id: str, deck_patch: DeckPatchSchema):
 
 @router.delete('/{uuid:id}')
 def delete_deck(request, id: str):
-    decks(request).get(id=id).delete()
+    Deck.editable_by(request.auth).get(id=id).delete()
 
 
 @router.post('/{uuid:id}/export')
 def export_deck(request, id: str, settings: DeckCSVSettingsSchema):
-    deck = decks(request).get(id=id)
+    deck = Deck.visible_by(request.auth).get(id=id)
     return CSVService(**settings.dict(exclude_none=True)).export_deck(deck)
-
-
-def decks(request):
-    if request.auth.is_superuser:
-        return Deck.objects.all()
-    return Deck.objects.filter(user=request.auth).all()

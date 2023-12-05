@@ -1,4 +1,4 @@
-from typing import Literal
+from typing import Literal, Optional
 
 from ninja import ModelSchema, Schema
 
@@ -22,16 +22,16 @@ class DeckSchema(ModelSchema):
 
 class DeckPostSchema(Schema):
     name: str
-    slug: str | None = None
-    front_language_code: str | None = None
-    back_language_code: str | None = None
+    slug: Optional[str] = None
+    front_language_code: Optional[str] = None
+    back_language_code: Optional[str] = None
 
 
 class DeckPatchSchema(Schema):
-    name: str | None = None
-    slug: str | None = None
-    front_language_code: str | None = None
-    back_language_code: str | None = None
+    name: Optional[str] = None
+    slug: Optional[str] = None
+    front_language_code: Optional[str] = None
+    back_language_code: Optional[str] = None
 
 
 class DeckCSVSettingsSchema(Schema):
