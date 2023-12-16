@@ -1,10 +1,11 @@
 from ninja import Router
+from ninja import Router
 from ninja.files import UploadedFile
 from ninja_jwt.authentication import JWTAuth
 
 from v1.models import Card, Deck
 from v1.schemas.card_schemas import CardSchema, CardPostSchema, CardPatchSchema
-from v1.services import ImageService
+from v1.services import ImageService, SentenceService
 
 router = Router(auth=JWTAuth())
 
@@ -56,3 +57,21 @@ def delete_image(request, id: str):
     card = Card.ediable_by(request.auth).get(id=id)
     card.image.delete()
     card.save()
+
+
+@router.post('/{uuid:id}/generate_sentences', response=CardSchema)
+def patch_and_generate_sentences(request, id: str, card_patch: CardPatchSchema):
+    card = Card.ediable_by(request.auth).get(id=id)
+    card.update(**card_patch.dict(exclude_defaults=True))
+    front, back = SentenceService(
+        language_from=card.deck.front_language_code,
+        language_to=card.deck.back_language_code,
+        retries=3
+    ).generate_sentences(card.front, card.back)
+
+    if front and back:
+        card.example_front = front
+        card.example_back = back
+        card.save()
+
+    return card
