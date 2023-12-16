@@ -1,7 +1,7 @@
-from asgiref.sync import sync_to_async, async_to_sync
+from ninja import Router
 from ninja import Router
 from ninja.files import UploadedFile
-from ninja_jwt.authentication import AsyncJWTAuth, JWTAuth
+from ninja_jwt.authentication import JWTAuth
 
 from v1.models import Card, Deck
 from v1.schemas.card_schemas import CardSchema, CardPostSchema, CardPatchSchema
