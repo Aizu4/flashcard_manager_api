@@ -24,7 +24,7 @@ class SentenceService:
 
     def _generate_sentences(self, front_word: str, back_word: str):
         response = self.client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-3.5-turbo-1106",
             messages=[
                 {
                     "role": "system",
