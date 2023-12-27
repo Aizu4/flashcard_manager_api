@@ -10,6 +10,7 @@ class TranslationService(BaseOpenAIService):
                 back_language=self.language_to
             ),
             user_input=front_word,
+            max_tokens=8,
         )
 
         if response.choices[0].finish_reason != "stop":

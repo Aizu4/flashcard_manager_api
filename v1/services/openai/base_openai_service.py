@@ -38,7 +38,7 @@ class BaseOpenAIService:
 
     _DEFAULT_PARAMS = dict(
         temperature=1,
-        max_tokens=128,
+        max_tokens=64,
         top_p=1,
         frequency_penalty=0,
         presence_penalty=0,
