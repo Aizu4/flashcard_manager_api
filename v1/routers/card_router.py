@@ -6,6 +6,7 @@ from ninja_jwt.authentication import JWTAuth
 from v1.models import Card, Deck
 from v1.schemas.card_schemas import CardSchema, CardPostSchema, CardPatchSchema
 from v1.services import ImageService, SentenceService
+from v1.services.openai import TranslationService
 
 router = Router(auth=JWTAuth())
 
@@ -59,19 +60,35 @@ def delete_image(request, id: str):
     card.save()
 
 
+@router.post('/{uuid:id}/generate_translations', response=CardSchema)
+def patch_and_generate_translations(request, id: str, card_patch: CardPatchSchema):
+    card = Card.ediable_by(request.auth).get(id=id)
+    card.update(**card_patch.dict(exclude_defaults=True))
+    translations = TranslationService(
+        language_from=card.deck.front_language_code,
+        language_to=card.deck.back_language_code,
+        retries=3
+    ).generate(card.front)
+
+    if translations:
+        card.back = '; '.join(translations)
+        card.save()
+
+    return card
+
+
 @router.post('/{uuid:id}/generate_sentences', response=CardSchema)
 def patch_and_generate_sentences(request, id: str, card_patch: CardPatchSchema):
     card = Card.ediable_by(request.auth).get(id=id)
     card.update(**card_patch.dict(exclude_defaults=True))
-    front, back = SentenceService(
+    sentence_pair = SentenceService(
         language_from=card.deck.front_language_code,
         language_to=card.deck.back_language_code,
         retries=3
-    ).generate_sentences(card.front, card.back)
+    ).generate(card.front, card.back)
 
-    if front and back:
-        card.example_front = front
-        card.example_back = back
+    if sentence_pair:
+        card.example_front, card.example_back = sentence_pair
         card.save()
 
     return card
