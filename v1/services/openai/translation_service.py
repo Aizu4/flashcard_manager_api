@@ -12,10 +12,8 @@ class TranslationService(BaseOpenAIService):
             user_input=front_word,
         )
 
-        content = response.choices[0].message.content
-
         if response.choices[0].finish_reason != "stop":
             return []
 
-        words = content.split("|")
-        return [word.strip() for word in words]
+        content = response.choices[0].message.content
+        return [word.strip() for word in content.split("|")]
