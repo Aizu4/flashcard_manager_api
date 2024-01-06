@@ -1,11 +1,11 @@
 from ninja import Router
-from ninja import Router
 from ninja.files import UploadedFile
 from ninja_jwt.authentication import JWTAuth
 
 from v1.models import Card, Deck
-from v1.schemas.card_schemas import CardSchema, CardPostSchema, CardPatchSchema
+from v1.schemas.card_schemas import CardSchema, CardPostSchema, CardPatchSchema, CardsFromTextPostSchema
 from v1.services import ImageService, SentenceService
+from v1.services.cards_from_text_service import CardsFromTextService
 from v1.services.openai import TranslationService
 
 router = Router(auth=JWTAuth())
@@ -40,6 +40,18 @@ def patch_card(request, id: str, card_patch: CardPatchSchema):
 @router.delete('/{uuid:id}')
 def delete_card(request, id: str):
     Card.ediable_by(request.auth).get(id=id).delete()
+
+
+@router.post('/bulk', response=list[CardSchema])
+def post_bulk_cards(request, deck_id: str, text: CardsFromTextPostSchema):
+    if not Deck.objects.get(id=deck_id).is_editable_by(request.auth):
+        return
+
+    return Card.objects.bulk_create(
+        CardsFromTextService(
+            deck_id, generate_translations=text.generate_translations, generate_sentences=text.generate_sentences
+        ).from_bulk(text.content)
+    )
 
 
 @router.get('/{uuid:id}/image')

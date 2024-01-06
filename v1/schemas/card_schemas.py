@@ -28,3 +28,9 @@ class CardPatchSchema(Schema):
     notes: Optional[str] = None
     example_front: Optional[str] = None
     example_back: Optional[str] = None
+
+
+class CardsFromTextPostSchema(Schema):
+    content: str
+    generate_translations: Optional[bool] = False
+    generate_sentences: Optional[bool] = False
