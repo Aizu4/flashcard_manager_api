@@ -37,3 +37,4 @@ class DeckPatchSchema(Schema):
 class DeckCSVSettingsSchema(Schema):
     separator: Literal[',', ';', '\t', '|']
     quotechar: Literal['\'', '"', '`']
+    with_images: Optional[bool] = False

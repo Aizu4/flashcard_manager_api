@@ -25,6 +25,16 @@ class Card(TimestampMixin, AccessCheckMixin, BaseModel):
     def public(self):
         return self.deck.public
 
+    @property
+    def image_name(self):
+        if self.image:
+            return self.image.name.removeprefix('static/cards/images/')
+        return None
+
+    @image_name.setter
+    def image_name(self, value):
+        self.image.name = f'static/cards/images/{value}'
+
     @classmethod
     def ediable_by(cls, user: User) -> QuerySet['Card']:
         if user.is_superuser:
