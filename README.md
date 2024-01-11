@@ -6,9 +6,9 @@
 
 ## Technologies
 
-* Django
-* Django Ninja
-* SQLite
+* [Django](https://www.djangoproject.com/)
+* [Django Ninja](https://django-ninja.rest-framework.com/)
+* [SQLite](https://www.sqlite.org/index.html)
 
 ## Prerequisites
 
