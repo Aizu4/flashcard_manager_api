@@ -2,7 +2,7 @@
 <p>
 </p>
 
-> The server part of the flashcard manager API, written as an engineering thesis project. For the client part, see [Flashcard Manager WEB](https://github.com/Aizu4/flashcard_manager_web)
+The server part of the flashcard manager API, written as an engineering thesis project. For the client part, see [Flashcard Manager WEB](https://github.com/Aizu4/flashcard_manager_web)
 
 ## Technologies
 
