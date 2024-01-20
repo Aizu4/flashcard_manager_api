@@ -41,3 +41,4 @@ class DeckCSVSettingsSchema(Schema):
     separator: Literal[',', ';', '\t', '|']
     quotechar: Literal['\'', '"', '`']
     with_images: Optional[bool] = False
+    with_tags: Optional[bool] = False
