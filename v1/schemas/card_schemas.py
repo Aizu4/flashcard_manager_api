@@ -3,9 +3,12 @@ from typing import Optional
 from ninja import ModelSchema, Schema
 
 from v1.models import Card
+from v1.schemas.tag_schemas import TagSchema
 
 
 class CardSchema(ModelSchema):
+    tags: list[TagSchema]
+
     class Config:
         model = Card
         model_fields = "__all__"

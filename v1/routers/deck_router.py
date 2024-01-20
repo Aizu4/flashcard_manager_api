@@ -55,13 +55,9 @@ def export_deck_images(request, id: str):
     return ImagesToZipService().export_images(deck)
 
 
-# Tags #
-
-
-@router.get('/{uuid:id}/tags', response=list[TagSchema])
-def get_tags_from_deck(request, id: str):
-    deck = Deck.visible_by(request.auth).get(id=id)
-    return deck.tag_set.all()
+# ================================ #
+# ============= Tags ============= #
+# ================================ #
 
 
 @router.post('/{uuid:id}/tags', response=TagSchema)

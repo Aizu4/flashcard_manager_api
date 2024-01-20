@@ -16,4 +16,4 @@ class TagPostSchema(Schema):
 
 
 class TagPatchSchema(Schema):
-    name: Optional[str] = None
+    name: str
