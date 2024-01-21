@@ -2,8 +2,9 @@ from ninja import Router
 from ninja.files import UploadedFile
 from ninja_jwt.authentication import JWTAuth
 
-from v1.models import Card, Deck
+from v1.models import Card, Deck, Tag
 from v1.schemas.card_schemas import CardSchema, CardPostSchema, CardPatchSchema, CardsFromTextPostSchema
+from v1.schemas.tag_schemas import TagSchema, TagPostSchema
 from v1.services import ImageService, SentenceService
 from v1.services.cards_from_text_service import CardsFromTextService
 from v1.services.openai import TranslationService
@@ -103,4 +104,24 @@ def patch_and_generate_sentences(request, id: str, card_patch: CardPatchSchema):
         card.example_front, card.example_back = sentence_pair
         card.save()
 
+    return card
+
+
+# ================================ #
+# ============= Tags ============= #
+# ================================ #
+
+@router.post('/{uuid:card_id}/tags/{uuid:tag_id}', response=CardSchema)
+def post_tag_to_card(request, card_id: str, tag_id: str):
+    card = Card.ediable_by(request.auth).get(id=card_id)
+    tag = card.deck.tag_set.get(id=tag_id)
+    card.tags.add(tag)
+    return card
+
+
+@router.delete('/{uuid:card_id}/tags/{uuid:tag_id}', response=CardSchema)
+def delete_tag_from_card(request, card_id: str, tag_id: str):
+    card = Card.ediable_by(request.auth).get(id=card_id)
+    tag = card.deck.tag_set.get(id=tag_id)
+    card.tags.remove(tag)
     return card

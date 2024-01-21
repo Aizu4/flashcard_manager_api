@@ -1,8 +1,9 @@
 from ninja import Router
 from ninja_jwt.authentication import JWTAuth
 
-from v1.models import Deck
+from v1.models import Deck, Tag
 from v1.schemas.deck_schemas import DeckSchema, DeckPostSchema, DeckPatchSchema, DeckSimpleSchema, DeckCSVSettingsSchema
+from v1.schemas.tag_schemas import TagPostSchema, TagSchema, TagPatchSchema
 from v1.services import ImagesToZipService
 from v1.services.csv_service import CSVService
 
@@ -52,3 +53,29 @@ def export_deck(request, id: str, settings: DeckCSVSettingsSchema):
 def export_deck_images(request, id: str):
     deck = Deck.visible_by(request.auth).get(id=id)
     return ImagesToZipService().export_images(deck)
+
+
+# ================================ #
+# ============= Tags ============= #
+# ================================ #
+
+
+@router.post('/{uuid:id}/tags', response=TagSchema)
+def post_tag_to_deck(request, id: str, tag: TagPostSchema):
+    deck = Deck.editable_by(request.auth).get(id=id)
+    return Tag.objects.create(deck=deck, **tag.dict(exclude_defaults=True))
+
+
+@router.patch('/{uuid:id}/tags/{uuid:tag_id}', response=TagSchema)
+def patch_tag_from_deck(request, id: str, tag_id: str, tag_patch: TagPatchSchema):
+    deck = Deck.editable_by(request.auth).get(id=id)
+    tag = deck.tag_set.get(id=tag_id)
+    tag.update(**tag_patch.dict(exclude_defaults=True))
+    tag.save()
+    return tag
+
+
+@router.delete('/{uuid:id}/tags/{uuid:tag_id}')
+def delete_tag_from_deck(request, id: str, tag_id: str):
+    deck = Deck.editable_by(request.auth).get(id=id)
+    deck.tag_set.get(id=tag_id).delete()
