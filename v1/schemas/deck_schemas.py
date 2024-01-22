@@ -3,7 +3,7 @@ from typing import Literal, Optional
 from ninja import ModelSchema, Schema
 
 from v1.models import Deck
-from v1.schemas.card_schemas import CardSchema
+from v1.schemas.card_schemas import CardSchema, CardQuizSchema
 from v1.schemas.tag_schemas import TagSchema
 
 
@@ -11,6 +11,14 @@ class DeckSimpleSchema(ModelSchema):
     class Config:
         model = Deck
         model_fields = "__all__"
+
+
+class DeckQuizSchema(ModelSchema):
+    card_set: list[CardQuizSchema]
+
+    class Config:
+        model = Deck
+        model_fields = ["name", "front_language_code", "back_language_code"]
 
 
 class DeckSchema(ModelSchema):

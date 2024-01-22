@@ -1,8 +1,11 @@
 from ninja import Router
 from ninja_jwt.authentication import JWTAuth
 
+from django.shortcuts import get_object_or_404
+
 from v1.models import Deck, Tag
-from v1.schemas.deck_schemas import DeckSchema, DeckPostSchema, DeckPatchSchema, DeckSimpleSchema, DeckCSVSettingsSchema
+from v1.schemas.deck_schemas import DeckSchema, DeckPostSchema, DeckPatchSchema, DeckSimpleSchema, \
+    DeckCSVSettingsSchema, DeckQuizSchema
 from v1.schemas.tag_schemas import TagPostSchema, TagSchema, TagPatchSchema
 from v1.services import ImagesToZipService
 from v1.services.csv_service import CSVService
@@ -53,6 +56,11 @@ def export_deck(request, id: str, settings: DeckCSVSettingsSchema):
 def export_deck_images(request, id: str):
     deck = Deck.visible_by(request.auth).get(id=id)
     return ImagesToZipService().export_images(deck)
+
+
+@router.get('/s/{str:slug}', response=DeckQuizSchema, auth=None)
+def get_deck_by_slug(_request, slug: str):
+    return get_object_or_404(Deck, slug=slug, public=True)
 
 
 # ================================ #
