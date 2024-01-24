@@ -43,7 +43,7 @@ class Card(TimestampMixin, AccessCheckMixin, BaseModel):
 
     @classmethod
     def visible_by(cls, user: User) -> QuerySet['Card']:
-        return cls.ediable_by(user) | cls.ediable_by(user).filter(deck__public=True)
+        return cls.ediable_by(user) | cls.objects.filter(deck__public=True)
 
 
 @receiver(post_delete, sender=Card)
