@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('v1', '0015_alter_deck_slug'),
+        ('v1', '0014_card_example'),
     ]
 
     operations = [

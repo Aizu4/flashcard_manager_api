@@ -23,20 +23,22 @@ class Deck(TimestampMixin, AccessCheckMixin, BaseModel):
     slug = models.CharField(max_length=16, unique=True, db_index=True, null=True)
 
     @classmethod
-    def editable_by(cls, user: User) -> QuerySet['Deck']:
+    def editable_by(cls, user: User | None) -> QuerySet['Deck']:
+        if not user:
+            return cls.objects.none()
         if user.is_superuser:
             return cls.objects.all()
         return cls.objects.filter(user=user)
 
     @classmethod
-    def visible_by(cls, user: User) -> QuerySet['Deck']:
+    def visible_by(cls, user: User | None) -> QuerySet['Deck']:
         return cls.editable_by(user) | cls.objects.filter(public=True)
 
 
 @receiver(pre_save, sender=Deck)
 def pre_save_handler(sender: Deck, instance, **_kwargs):
     if not instance.public:
-        return
+        instance.slug = None
 
-    if not instance.slug or sender.objects.exclude(id=instance.id).filter(public=True, slug=instance.slug).exists():
+    elif not instance.slug:
         instance.slug = slug_generator()

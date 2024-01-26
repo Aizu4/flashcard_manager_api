@@ -32,14 +32,12 @@ class DeckSchema(ModelSchema):
 
 class DeckPostSchema(Schema):
     name: str
-    slug: Optional[str] = None
     front_language_code: Optional[str] = None
     back_language_code: Optional[str] = None
 
 
 class DeckPatchSchema(Schema):
     name: Optional[str] = None
-    slug: Optional[str] = None
     front_language_code: Optional[str] = None
     back_language_code: Optional[str] = None
     public: Optional[bool] = None

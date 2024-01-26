@@ -36,13 +36,15 @@ class Card(TimestampMixin, AccessCheckMixin, BaseModel):
         self.image.name = f'static/cards/images/{value}'
 
     @classmethod
-    def ediable_by(cls, user: User) -> QuerySet['Card']:
+    def ediable_by(cls, user: User | None) -> QuerySet['Card']:
+        if not user:
+            return cls.objects.none()
         if user.is_superuser:
             return cls.objects.all()
         return cls.objects.filter(deck__user=user)
 
     @classmethod
-    def visible_by(cls, user: User) -> QuerySet['Card']:
+    def visible_by(cls, user: User | None) -> QuerySet['Card']:
         return cls.ediable_by(user) | cls.objects.filter(deck__public=True)
 
 

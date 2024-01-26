@@ -2,7 +2,6 @@
 
 from django.db import migrations, models
 import django.utils.timezone
-import v1.models.mixins.slug_mixin
 
 
 class Migration(migrations.Migration):
@@ -33,15 +32,5 @@ class Migration(migrations.Migration):
             model_name='directory',
             name='modified_at',
             field=models.DateTimeField(auto_now=True),
-        ),
-        migrations.AlterField(
-            model_name='deck',
-            name='slug',
-            field=models.CharField(default=v1.models.mixins.slug_mixin._slug_generator, max_length=16, unique=True),
-        ),
-        migrations.AlterField(
-            model_name='directory',
-            name='slug',
-            field=models.CharField(default=v1.models.mixins.slug_mixin._slug_generator, max_length=16, unique=True),
         ),
     ]
