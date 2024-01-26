@@ -36,7 +36,7 @@ class Deck(TimestampMixin, AccessCheckMixin, BaseModel):
 
 
 @receiver(pre_save, sender=Deck)
-def pre_save_handler(sender: Deck, instance, **_kwargs):
+def pre_save_handler(_sender: Deck, instance, **_kwargs):
     if not instance.public:
         instance.slug = None
 
