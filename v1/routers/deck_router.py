@@ -67,7 +67,7 @@ def export_deck_images(request, id: str):
 
 
 @router.get('/s/{str:slug}', response=DeckQuizSchema, auth=None)
-def get_deck_by_slug(_request, slug: str):
+def get_public_deck_by_slug(_request, slug: str):
     try:
         return Deck.visible_by(None).get(slug=slug)
     except Deck.DoesNotExist:
