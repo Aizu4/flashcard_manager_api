@@ -9,6 +9,7 @@ The server part of the flashcard manager API, written as an engineering thesis p
 * [Django](https://www.djangoproject.com/)
 * [Django Ninja](https://django-ninja.dev/)
 * [SQLite](https://www.sqlite.org/index.html)
+* [OpenAI API](https://openai.com/blog/openai-api)
 
 ## Prerequisites
 
