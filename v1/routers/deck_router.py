@@ -40,15 +40,6 @@ def delete_deck(request, id: str):
     Deck.editable_by(request.auth).get(id=id).delete()
 
 
-@router.patch('/{uuid:id}/s')
-def patch_deck_slug(request, id: str, slug: str):
-    if Deck.objects.filter(slug=slug, public=True).exists():
-        return HttpResponse(status=409)  # Conflict
-    deck = Deck.editable_by(request.auth).get(id=id)
-    deck.slug = slug
-    deck.save()
-
-
 @router.delete('/{uuid:id}/empty_cards')
 def delete_empty_cards(request, id: str):
     Deck.editable_by(request.auth).get(id=id).card_set.filter(front='', back='').delete()
@@ -72,6 +63,15 @@ def get_public_deck_by_slug(_request, slug: str):
         return Deck.visible_by(None).get(slug=slug)
     except Deck.DoesNotExist:
         return HttpResponse(status=404)
+
+
+@router.patch('/{uuid:id}/s')
+def patch_deck_slug(request, id: str, slug: str):
+    if Deck.objects.filter(slug=slug, public=True).exists():
+        return HttpResponse(status=409)  # Conflict
+    deck = Deck.editable_by(request.auth).filter(public=True).get(id=id)
+    deck.slug = slug
+    deck.save()
 
 
 # ================================ #
