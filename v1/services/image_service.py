@@ -1,6 +1,5 @@
 from http import HTTPStatus
 
-from PIL import Image
 from django.http import HttpResponse
 from ninja import UploadedFile
 
