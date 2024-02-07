@@ -1,10 +1,10 @@
 from django.http import HttpResponse
-from ninja import Router
+from ninja import Router, UploadedFile, Form
 from ninja_jwt.authentication import JWTAuth
 
 from v1.models import Deck, Tag
 from v1.schemas.deck_schemas import DeckSchema, DeckPostSchema, DeckPatchSchema, DeckSimpleSchema, \
-    DeckCSVSettingsSchema, DeckQuizSchema
+    DeckCSVSettingsSchema, DeckQuizSchema, DeckCSVImportSchema
 from v1.schemas.tag_schemas import TagPostSchema, TagSchema, TagPatchSchema
 from v1.services import ImagesToZipService
 from v1.services.csv_service import CSVService
@@ -52,6 +52,13 @@ def patch_deck_slug(request, id: str, slug: str):
 @router.delete('/{uuid:id}/empty_cards')
 def delete_empty_cards(request, id: str):
     Deck.editable_by(request.auth).get(id=id).card_set.filter(front='', back='').delete()
+
+
+@router.post('/{uuid:id}/import')
+def import_deck(request, id: str, data: DeckCSVImportSchema):
+    deck = Deck.editable_by(request.auth).get(id=id)
+    CSVService(separator=data.separator, quotechar=data.quotechar).import_deck(deck, data.file)
+    return HttpResponse(status=201)
 
 
 @router.post('/{uuid:id}/export')
