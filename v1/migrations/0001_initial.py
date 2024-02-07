@@ -3,7 +3,6 @@
 from django.db import migrations, models
 import django.db.models.deletion
 import uuid
-import v1.models.mixins.slug_mixin
 
 
 class Migration(migrations.Migration):
@@ -18,7 +17,6 @@ class Migration(migrations.Migration):
             name='Directory',
             fields=[
                 ('uuid', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('slug', models.CharField(default=v1.models.mixins.SlugMixin._slug_generator, max_length=16, unique=True)),
                 ('name', models.CharField(max_length=128)),
             ],
             options={
@@ -29,7 +27,6 @@ class Migration(migrations.Migration):
             name='Deck',
             fields=[
                 ('uuid', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('slug', models.CharField(default=v1.models.mixins.SlugMixin._slug_generator, max_length=16, unique=True)),
                 ('name', models.CharField(max_length=128)),
                 ('directory', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='v1.directory')),
             ],

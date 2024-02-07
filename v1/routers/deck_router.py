@@ -1,8 +1,10 @@
+from django.http import HttpResponse
 from ninja import Router
 from ninja_jwt.authentication import JWTAuth
 
 from v1.models import Deck, Tag
-from v1.schemas.deck_schemas import DeckSchema, DeckPostSchema, DeckPatchSchema, DeckSimpleSchema, DeckCSVSettingsSchema
+from v1.schemas.deck_schemas import DeckSchema, DeckPostSchema, DeckPatchSchema, DeckSimpleSchema, \
+    DeckCSVSettingsSchema, DeckQuizSchema
 from v1.schemas.tag_schemas import TagPostSchema, TagSchema, TagPatchSchema
 from v1.services import ImagesToZipService
 from v1.services.csv_service import CSVService
@@ -38,6 +40,15 @@ def delete_deck(request, id: str):
     Deck.editable_by(request.auth).get(id=id).delete()
 
 
+@router.patch('/{uuid:id}/s')
+def patch_deck_slug(request, id: str, slug: str):
+    if Deck.objects.filter(slug=slug, public=True).exists():
+        return HttpResponse(status=409)  # Conflict
+    deck = Deck.editable_by(request.auth).get(id=id)
+    deck.slug = slug
+    deck.save()
+
+
 @router.delete('/{uuid:id}/empty_cards')
 def delete_empty_cards(request, id: str):
     Deck.editable_by(request.auth).get(id=id).card_set.filter(front='', back='').delete()
@@ -53,6 +64,14 @@ def export_deck(request, id: str, settings: DeckCSVSettingsSchema):
 def export_deck_images(request, id: str):
     deck = Deck.visible_by(request.auth).get(id=id)
     return ImagesToZipService().export_images(deck)
+
+
+@router.get('/s/{str:slug}', response=DeckQuizSchema, auth=None)
+def get_public_deck_by_slug(_request, slug: str):
+    try:
+        return Deck.visible_by(None).get(slug=slug)
+    except Deck.DoesNotExist:
+        return HttpResponse(status=404)
 
 
 # ================================ #

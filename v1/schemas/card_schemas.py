@@ -3,7 +3,7 @@ from typing import Optional
 from ninja import ModelSchema, Schema
 
 from v1.models import Card
-from v1.schemas.tag_schemas import TagSchema
+from v1.schemas.tag_schemas import TagSchema, TagSimpleSchema
 
 
 class CardSchema(ModelSchema):
@@ -13,6 +13,14 @@ class CardSchema(ModelSchema):
         model = Card
         model_fields = "__all__"
         model_exclude = ["image"]
+
+
+class CardQuizSchema(ModelSchema):
+    tags: list[TagSimpleSchema]
+
+    class Config:
+        model = Card
+        model_fields = ["front", "back", "example_front", "example_back", "notes"]
 
 
 class CardPostSchema(Schema):
